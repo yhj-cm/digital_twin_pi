@@ -1,5 +1,6 @@
 import RPi.GPIO as gpio
 from time import sleep
+from threading import Thread
 
 gpio.setmode(gpio.BCM)
 
@@ -58,6 +59,16 @@ def ledGreenFunction():
         greenLedState = not greenLedState
 
 leds = (Led(16, "RED"),Led(21, "GREEN"))
+
+def ledRedFunction():
+    def threadRun():
+        leds[0].blink(10,0.5)
+
+        thread = Thread(target=threadRun, daemon=True)
+        thread.start()
+
+
+greenLedState = False
 buttons = (Button(13, ledRedFunction()), Button(19, ledGreenFunction()))
 
 try:
